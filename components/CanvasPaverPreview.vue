@@ -1,11 +1,11 @@
 <template>
-    <div>
-        <canvas ref="canvasRef" width="800" height="600"></canvas>
+    <div ref="containerRef" style="width: 100%; height: 400px;">
+        <canvas ref="canvasRef" style="display: block; width: 100%; height: 100%;"></canvas>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 
 /**
  * Props du composant :
@@ -23,14 +23,77 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const containerRef = ref<HTMLDivElement | null>(null)
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 
-// Dessin au montage et à chaque changement de props
-onMounted(draw)
+// 1) Au montage : on met à la taille du conteneur, on dessine
+// 2) On écoute le resize window pour s'adapter en direct
+onMounted(() => {
+    resizeCanvasAndDraw()
+    window.addEventListener('resize', resizeCanvasAndDraw)
+})
+
+// On se désabonne du resize quand le composant se démonte
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', resizeCanvasAndDraw)
+})
+
+// 3) À chaque changement de props, on redimensionne + redessine
 watch(
     () => [props.terraceWidth, props.terraceHeight, props.paverWidth, props.paverLength, props.pattern],
-    draw
+    () => {
+        resizeCanvasAndDraw()
+    }
 )
+
+// Fonction qui redimensionne le canvas (sa résolution interne) 
+// en fonction de la taille du conteneur, puis appelle draw().
+function resizeCanvasAndDraw() {
+    if (!containerRef.value || !canvasRef.value) return
+
+    const container = containerRef.value
+    const canvas = canvasRef.value
+
+    // Mesurer le conteneur
+    const rect = container.getBoundingClientRect()
+
+    // Gérer le ratio pixel (pour éviter le flou sur écrans HD/Retina)
+    const dpr = window.devicePixelRatio || 1
+
+    // Ajuster la résolution interne du canvas
+    canvas.width = rect.width * dpr
+    canvas.height = rect.height * dpr
+
+    // Exemple : si on dessine en 2D, on peut corriger l'échelle
+    const ctx = canvas.getContext('2d')
+    if (ctx) {
+        ctx.scale(dpr, dpr)
+    }
+
+    // Appeler la fonction de dessin
+    draw()
+}
+
+// Fonction qui ajuste la taille interne du canvas à celle du conteneur
+function resizeCanvas() {
+    if (!containerRef.value || !canvasRef.value) return
+
+    const rect = containerRef.value.getBoundingClientRect()
+    const devicePixelRatio = window.devicePixelRatio || 1
+
+    // Ajuster la résolution interne (en pixels) du canvas
+    canvasRef.value.width = rect.width * devicePixelRatio
+    canvasRef.value.height = rect.height * devicePixelRatio
+
+    // Facultatif : si vous dessinez quelque chose, redessinez tout maintenant
+    const ctx = canvasRef.value.getContext('2d')
+    if (ctx) {
+        // Exemple de test : un rectangle occupant toute la zone
+        ctx.scale(devicePixelRatio, devicePixelRatio)  // pour “corriger” l’échelle
+        ctx.fillStyle = '#aabbaa'
+        ctx.fillRect(0, 0, rect.width, rect.height)
+    }
+}
 
 /**
  * Fonction principale de dessin :
