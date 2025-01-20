@@ -47,14 +47,15 @@
                         <v-select v-model="selectedPattern" :items="['straight', 'staggered']"
                             label="Choisissez le motif de pose" class="pt-10" />
 
-                        <!-- Aperçu visuel via CanvasPaverPreview -->
-                        <CanvasPaverPreview :terraceWidth="terraceWidth" :terraceHeight="terraceLength"
-                            :paverWidth="paverWidth" :paverLength="paverLength" :pattern="selectedPattern" />
+                
                     </v-col>
 
 
 
                 </v-row>
+                <!-- Aperçu visuel via CanvasPaverPreview -->
+                        <CanvasPaverPreview :terraceWidth="terraceWidth" :terraceHeight="terraceLength"
+                            :paverWidth="paverWidth" :paverLength="paverLength" :pattern="selectedPattern" />
             </v-container>
         </v-main>
     </v-app>
