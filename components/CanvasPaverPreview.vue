@@ -124,7 +124,7 @@ function draw() {
     }
 
     // Dimensions et échelle
-    const padding = 10
+    const padding = 20
     const availW = canvas.width - 2 * padding
     const availH = canvas.height - 2 * padding
     const scaleX = availW / terraceWidth
