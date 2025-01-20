@@ -48,11 +48,11 @@
                             label="Choisissez le motif de pose" class="pt-10" />            
                  
                     </v-col>
-
-                </v-row>
-              <!-- Aperçu visuel via CanvasPaverPreview -->
+ <!-- Aperçu visuel via CanvasPaverPreview -->
                         <CanvasPaverPreview :terraceWidth="terraceWidth" :terraceHeight="terraceLength"
                             :paverWidth="paverWidth" :paverLength="paverLength" :pattern="selectedPattern" />
+                </v-row>
+             
             </v-container>
         </v-main>
     </v-app>
