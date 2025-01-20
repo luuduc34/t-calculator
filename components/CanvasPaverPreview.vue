@@ -1,6 +1,6 @@
 <template>
     <div ref="containerRef" style="width: 100%; height: 100%;">
-        <canvas ref="canvasRef" style="display: flex; width: 100%; height: 100%;"></canvas>
+        <canvas ref="canvasRef" style="display: block; width: 100%; height: 100%;"></canvas>
     </div>
 </template>
 
@@ -62,7 +62,7 @@ function resizeCanvasAndDraw() {
 
     // Ajuster la résolution interne du canvas
     canvas.width = rect.width * dpr
-    canvas.height = rect.height * dpr
+    canvas.height = rect.height * dpr * 1.2
 
     // Exemple : si on dessine en 2D, on peut corriger l'échelle
     const ctx = canvas.getContext('2d')
