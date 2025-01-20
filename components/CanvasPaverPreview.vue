@@ -1,6 +1,6 @@
 <template>
     <div ref="containerRef" style="width: 100%; height: 100%;">
-        <canvas ref="canvasRef" style="display: block; width: 100%; height: 100%;"></canvas>
+        <canvas ref="canvasRef" style="display: flex; width: 100%; height: 100%;"></canvas>
     </div>
 </template>
 
@@ -126,7 +126,7 @@ function draw() {
     // Dimensions et échelle
     const padding = 20
     const availW = canvas.width - 2 * padding
-    const availH = canvas.height - 3 * padding
+    const availH = canvas.height
     const scaleX = availW / terraceWidth
     const scaleY = availH / terraceHeight
     const scale = Math.min(scaleX, scaleY)
