@@ -1,5 +1,5 @@
 <template>
-    <div ref="containerRef" style="width: 100%; height: 100%; overflow: auto;">
+    <div ref="containerRef" style="width: 100%; height: 100%;">
         <canvas ref="canvasRef" style="display: block; width: 100%; height: 100%;"></canvas>
     </div>
 </template>
