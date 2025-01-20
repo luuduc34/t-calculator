@@ -189,8 +189,6 @@ function drawStraight(
             // Rognage
             const xRight = x + pWidthPx
             const yBottom = y + pLengthPx
-            if (xRight <= xMin || x >= xMax) continue
-            if (yBottom <= yMin || y >= yMax) continue
 
             const clippedX = Math.max(x, xMin)
             const clippedWidth = Math.min(xRight, xMax) - clippedX
@@ -238,8 +236,6 @@ function drawStaggered(
 
             const xRight = x + pWidthPx
             const yBottom = y + pLengthPx
-            if (xRight <= xMin || x >= xMax) continue
-            if (yBottom <= yMin || y >= yMax) continue
 
             const clippedX = Math.max(x, xMin)
             const clippedWidth = Math.min(xRight, xMax) - clippedX
@@ -250,60 +246,6 @@ function drawStaggered(
             ctx.rect(clippedX, clippedY, clippedWidth, clippedHeight)
             ctx.fill()
             ctx.stroke()
-        }
-    }
-}
-
-/**
- * 3) Motif "herringbone" (bâtons rompus basique) :
- *    - On dessine des blocs de 2 pavés :
- *        - Pavé A horizontal
- *        - Pavé B vertical
- *      formant un "L".
- *    - On répète ce bloc le long d'une rangée, puis on descend sur la suivante.
- *    - NB : c'est un motif simplifié, angle = 90° entre pavés,
- *           sans rotation à 45° (pour un vrai herringbone incliné, il faudrait plus de maths).
- */
-function drawHerringbone(
-    ctx: CanvasRenderingContext2D,
-    xMin: number, yMin: number, xMax: number, yMax: number,
-    scale: number
-) {
-    const { paverWidth, paverLength, terraceWidth, terraceHeight } = props
-
-    const pWidthPx = paverWidth * scale
-    const pLengthPx = paverLength * scale
-
-    ctx.fillStyle = '#aabbaa'
-    ctx.strokeStyle = '#333'
-    ctx.lineWidth = 1
-
-    // Taille d'un "bloc" =  paverLength * paverWidth ...
-    // En fait, un bloc "L" fait environ paverLength + paverWidth en largeur, paverLength + paverWidth en hauteur.
-    // On va simplifier en se disant qu'un bloc est de la taille max (pLengthPx + pWidthPx) dans chaque direction
-    // pour être sûr de couvrir l'encombrement.
-    const blockSizeX = pLengthPx + pWidthPx
-    const blockSizeY = pLengthPx + pWidthPx
-
-    // Combien de blocs en X et Y ?
-    const nbBlockX = Math.ceil(terraceWidth * scale / blockSizeX)
-    const nbBlockY = Math.ceil(terraceHeight * scale / blockSizeY)
-
-    for (let row = 0; row < nbBlockY; row++) {
-        for (let col = 0; col < nbBlockX; col++) {
-            // Position "bloc"
-            const baseX = xMin + col * blockSizeX
-            const baseY = yMin + row * blockSizeY
-
-            // 1) Pavé A : horizontal, posé dans la partie haute du bloc
-            //    Largeur = pLengthPx, Hauteur = pWidthPx
-            //    => (x, y) = (baseX, baseY)
-            drawClippedRect(ctx, baseX, baseY, pLengthPx, pWidthPx, xMin, yMin, xMax, yMax)
-
-            // 2) Pavé B : vertical, collé au bout du pavé A
-            //    => (x, y) = (baseX + pLengthPx, baseY)
-            //    Largeur = pWidthPx, Hauteur = pLengthPx
-            drawClippedRect(ctx, baseX + pLengthPx, baseY, pWidthPx, pLengthPx, xMin, yMin, xMax, yMax)
         }
     }
 }
