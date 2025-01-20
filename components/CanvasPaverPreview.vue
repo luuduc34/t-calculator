@@ -263,10 +263,6 @@ function drawClippedRect(
     const xRight = x + width
     const yBottom = y + height
 
-    // Vérif si hors zone
-    if (xRight <= xMin || x >= xMax) return
-    if (yBottom <= yMin || y >= yMax) return
-
     const clippedX = Math.max(x, xMin)
     const clippedWidth = Math.min(xRight, xMax) - clippedX
 
